@@ -1,5 +1,7 @@
 $(document).ready(function() {
-    updateVariables();
+    //updateVariables();
+
+    $('[data-toggle="popover"]').popover();
 
     $(window).bind("beforeunload",function(event) {
         return ".";
@@ -8,24 +10,56 @@ $(document).ready(function() {
 
 function updateVariables() {
     $("#total-quantity").text(getTotalPeople() + " people");
-    $("#wfh-quantity").prop("max", getTotalPeople());
 }
 
-function onChangeVariables() {
-    var $wfhQuantity = $("#wfh-quantity");
-    setTimeout(() => {
-        $("#min-wfh").text(getMinWfh() + " people");
-        $("#min-on-site").text(Math.ceil(getTotalSeats()/2) + " people");
-        $wfhQuantity.prop("min", getMinWfh()).prop("max", getMaxWfh());
+function addTeam() {
+    $getTeam().insertBefore($("#add-team-button").parent());
+}
 
-        if ($wfhQuantity.val() < getMinWfh()) {
-            $wfhQuantity.val(getMinWfh());
-        }
+function saveTeam($saveBtn) {
+    const $teamName = $saveBtn.parent().parent().find(".team-name").first().find("input");
+    const $teamSize = $saveBtn.parent().parent().find(".team-size").first().find("input");
 
-        if ($wfhQuantity.val() > getMaxWfh()) {
-            $wfhQuantity.val(getMaxWfh());
-        }
-    }, 10)
+    $teamName.parent().text($teamName.val());
+    $teamSize.parent().text($teamSize.val());
+
+    $saveBtn.closest(".not-ready").removeClass("not-ready").addClass("ready");
+
+    $saveBtn.parent().append($getEditButton());
+    $saveBtn.remove();
+
+    updateTeams();
+}
+
+function editTeam($editBtn) {
+    const $teamName = $editBtn.parent().parent().find(".team-name").first();
+    const $teamSize = $editBtn.parent().parent().find(".team-size").first();
+    const teamName = $teamName.text();
+    const teamSize = $teamSize.text();
+    $teamName.empty();
+    $teamSize.empty();
+
+    $editBtn.closest(".ready").removeClass("ready").addClass("not-ready");
+
+    $("<input type='text' class='form-control'>").val(teamName).appendTo($teamName);
+    $("<input type='number' class='form-control' min='1'>").val(teamSize).appendTo($teamSize);
+
+    $editBtn.parent().append($getSaveTeamButton());
+    $editBtn.remove();
+
+    updateTeams();
+}
+
+function updateTeams() {
+    teams = [];
+    $.each($getReadyTeams(), (idx, obj) => {
+        teams.push({
+            teamName: $(obj).find(".team-name").first().text(),
+            teamSize: $(obj).find(".team-size").first().text()
+        });
+    });
+
+    updateVariables();
 }
 
 function generate() {
@@ -41,11 +75,11 @@ function generate() {
     }
 
     var slots = $getMainTBody().find("td");
-    var counter = Math.round(Math.random() * (getPool().length-1));
+    var counter = Math.round(Math.random() * (getTotalPeople()-1));
     var pillHolder;
 
     $.each(slots, (idx, obj) => {
-        pillHolder = $getPill().text(getPool()[counter%getTotalPeople()]);
+        pillHolder = $getPill().text(getTeamNames()[counter%getTotalPeople()]);
         addHover(pillHolder);
         pillHolder.appendTo($(obj));
         counter++;

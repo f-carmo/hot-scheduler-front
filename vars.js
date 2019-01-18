@@ -1,21 +1,21 @@
-function getPool() {
-    return [
-        "Andre Silva",
-        "Andre Requejo",
-        "Victor",
-        "Rafael Ide",
-        "Rafael Leal",
-        "Romulo",
-        "Spencer",
-        "Nicholas",
-        "Guilherme",
-        "John",
-        "Doe"
-    ];
-}
+let teams = [];
 
 function getTotalPeople() {
-    return getPool().length;
+    let total = 0;
+    $.each(teams, (idx, obj) => {
+        total += Number(obj.teamSize)
+    });
+
+    return total;
+}
+
+function getTeamNames() {
+    let names = [];
+    $.each(teams, (idx, obj) => {
+        names.push(obj.teamName)
+    });
+
+    return names;
 }
 
 function getMinWfh() {
@@ -33,4 +33,8 @@ function getTotalSeats() {
 
 function $getMainTBody() {
     return $("#main-tbody");
+}
+
+function $getReadyTeams() {
+    return $("#team-table-body").find(".ready");
 }
