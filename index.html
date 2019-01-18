@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="resources/jquery-3.3.1.min.js"></script>
+        <script src="resources/bootstrap.min.js"></script>
+        <script src="resources/moment.js"></script>
+        <script src="vars.js"></script>
+        <script src="validations.js"></script>
+        <script src="export.js"></script>
+        <script src="elements.js"></script>
+        <script src="index.js"></script>
+        <link rel="stylesheet" type="text/css" href="resources/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="row form-group">
+            <div class="col-md-8">
+                <table class="table table-dark">
+                    <thead>
+                    <tr>
+                        <th scope="col">Segunda</th>
+                        <th scope="col">Terca</th>
+                        <th scope="col">Quarta</th>
+                        <th scope="col">Quinta</th>
+                        <th scope="col">Sexta</th>
+                    </tr>
+                    </thead>
+                    <tbody id="main-tbody">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-3">
+                <div class="row">
+                    <table class="table table-dark">
+                        <tbody>
+                            <tr>
+                                <th scope="col">Seats available</th>
+                                <td>
+                                    <input id="total-seats" class="form-control" type="text" onkeydown="onChangeVariables()">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="col">People WFH</th>
+                                <td>
+                                    <input id="wfh-quantity" class="form-control" type="number" value="0">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="col">Current pool</th>
+                                <td id="total-quantity"></td>
+                            </tr>
+                            <tr>
+                                <th scope="col">Minimum WFH</th>
+                                <td id="min-wfh"></td>
+                            </tr>
+                            <tr>
+                                <th scope="col">Minimum On Site</th>
+                                <td id="min-on-site"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <button class="btn btn-dark" onclick="generate()">Generate</button>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-3">
+                <button class="btn btn-dark" onclick="exportICS()">Export ICS</button>
+                <button class="btn btn-dark" onclick="exportJSON()">Export JSON</button>
+            </div>
+        </div>
+        <div class="text-hide">
+            <span id="pill" class="badge badge-pill badge-light" style="cursor: pointer">test</span>
+            <table>
+                <tr id="day">
+                    <td class="seg"></td>
+                    <td class="ter"></td>
+                    <td class="qua"></td>
+                    <td class="qui"></td>
+                    <td class="sex"></td>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>
+
