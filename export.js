@@ -1,17 +1,30 @@
-function mapNextWeek() {
-    return {
-        "seg": moment().add(1, 'weeks').isoWeekday(1).format("YYYYMMDD"),
-        "ter": moment().add(1, 'weeks').isoWeekday(2).format("YYYYMMDD"),
-        "qua": moment().add(1, 'weeks').isoWeekday(3).format("YYYYMMDD"),
-        "qui": moment().add(1, 'weeks').isoWeekday(4).format("YYYYMMDD"),
-        "sex": moment().add(1, 'weeks').isoWeekday(5).format("YYYYMMDD")
-    };
+function mapNextWeek(opt) {
+
+    switch(opt) {
+        case 1:
+            return {
+                "seg": moment().add(1, 'weeks').isoWeekday(1).format("YYYYMMDD"),
+                "ter": moment().add(1, 'weeks').isoWeekday(2).format("YYYYMMDD"),
+                "qua": moment().add(1, 'weeks').isoWeekday(3).format("YYYYMMDD"),
+                "qui": moment().add(1, 'weeks').isoWeekday(4).format("YYYYMMDD"),
+                "sex": moment().add(1, 'weeks').isoWeekday(5).format("YYYYMMDD")
+            };
+
+        case 2:
+            return {
+                "seg": moment().add(1, 'weeks').isoWeekday(1).format("YYYY-MM-DD"),
+                "ter": moment().add(1, 'weeks').isoWeekday(2).format("YYYY-MM-DD"),
+                "qua": moment().add(1, 'weeks').isoWeekday(3).format("YYYY-MM-DD"),
+                "qui": moment().add(1, 'weeks').isoWeekday(4).format("YYYY-MM-DD"),
+                "sex": moment().add(1, 'weeks').isoWeekday(5).format("YYYY-MM-DD")
+            };
+    }
 }
 
-function createJSON() {
+function createJSON(opt) {
     var $slotting = $getMainTBody().find("td");
     var json = [];
-    var nextWeekDates = mapNextWeek();
+    var nextWeekDates = mapNextWeek(opt);
     $.each($slotting, (idx, obj) => {
         json.push({
             'summary': $(obj).text(),
@@ -28,12 +41,12 @@ function createJSON() {
 }
 
 function exportJSON() {
-    var file = new Blob([JSON.stringify(createJSON())], {type: ".txt"});
+    var file = new Blob([JSON.stringify(createJSON(2))], {type: ".txt"});
     downloadFile(file, ".txt");
 }
 
 function exportICS() {
-    var file = new Blob([writeIcs(createJSON())], {type: ".ics"});
+    var file = new Blob([writeIcs(createJSON(1))], {type: ".ics"});
     downloadFile(file, ".ics");
 }
 
