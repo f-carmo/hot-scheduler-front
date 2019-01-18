@@ -50,6 +50,10 @@ function editTeam($editBtn) {
     updateTeams();
 }
 
+function removeTeam($removeBtn) {
+    $removeBtn.parent().parent().remove();
+    updateTeams();
+}
 function updateTeams() {
     teams = [];
     $.each($getReadyTeams(), (idx, obj) => {
@@ -59,72 +63,84 @@ function updateTeams() {
         });
     });
 
+    updateSwitchTable();
     updateVariables();
 }
 
+function updateSwitchTable() {
+    var $pill, $row;
+    $getSwitchTable().find(".switch-table-row").remove();
+    $.each(teams, (idx, obj) => {
+        $pill = $getPill().text(obj.teamName);
+        $row = $getSwitchTableRow();
+        addSwitchTableEvent($pill);
+        $row.find("td").first().append($pill);
+        $getSwitchTable().append($row);
+    });
+
+    $pill = $getPill().text("Free");
+    $row = $getSwitchTableRow();
+    addSwitchTableEvent($pill);
+    $row.find("td").first().append($pill);
+    $getSwitchTable().append($row);
+
+    $row = $getSwitchTableRow();
+    $row.find("td").append($getCustomSwitchInput());
+    $getSwitchTable().append($row);
+}
+
+function generateTeamSeats() {
+    $.each(teams, (idx, obj) => {
+        obj.teamSeats = Math.round(obj.teamSize / getTotalPeople() * getTotalSeats() * getOccupation());
+        if (obj.teamSeats > obj.teamSize) obj.teamSeats = obj.teamSize;
+    });
+}
+
 function generate() {
+    /*
     if (!validateParameters()) {
         alert("Parameters are invalid");
         return false;
-    }
+    }*/
 
-    $getMainTBody().empty();
 
-    for (var x = 0; x < $("#wfh-quantity").val(); x++) {
-        $getTableRow().appendTo($getMainTBody());
-    }
+    generateSeats();
+    generateTeamSeats();
+    var weekdaySlots, seatPool =[], $pillHolder;
 
-    var slots = $getMainTBody().find("td");
-    var counter = Math.round(Math.random() * (getTotalPeople()-1));
-    var pillHolder;
+    $.each($getWeekDaysClass(), (idx, obj) => {
+        weekdaySlots = $getMainTBody().find(obj);
 
-    $.each(slots, (idx, obj) => {
+        $.each(teams, (teamId, team) => {
+            for (var x = 0; x < team.teamSeats; x++) {
+                seatPool.push(team.teamName);
+            }
+        });
+
+        $.each(weekdaySlots, (slotId, seat) => {
+            $pillHolder = $getPill();
+            addHover($pillHolder);
+            if (seatPool.length > 0) {
+                $(seat).append($pillHolder.text(seatPool.shift()))
+            } else {
+                $(seat).append($pillHolder.text("Free"))
+            }
+        });
+    });
+
+    /*
+    for (var y = 0; y < getTotalSeats(); y++) {
         pillHolder = $getPill().text(getTeamNames()[counter%getTotalPeople()]);
         addHover(pillHolder);
         pillHolder.appendTo($(obj));
-        counter++;
-    });
+    }*/
 }
 
-function addHover($obj) {
-    $obj.hover(() => {
-        $getMainTBody()
-            .find(".badge:contains("+$obj.text()+")")
-            .removeClass("badge-light")
-            .addClass("badge-primary");
-    }, () => {
-        $getMainTBody()
-            .find(".badge-primary")
-            .removeClass("badge-primary")
-            .addClass("badge-light");
-
-        $getMainTBody()
-            .find(".badge-danger")
-            .removeClass("badge-light");
-
-        $getMainTBody()
-            .find(".badge-warning")
-            .removeClass("badge-light");
-    });
-
-    $obj.click(() => {
-        if ($obj.hasClass("badge-danger") || $obj.hasClass("badge-warning")) {
-            $getMainTBody().find(".badge-danger").removeClass("badge-danger").addClass("badge-light");
-            $getMainTBody().find(".badge-warning").removeClass("badge-warning").addClass("badge-light");
-        } else {
-            var $holding = $getMainTBody().find(".badge-danger");
-            if ($holding.length > 0) {
-                if(validateSwitch($holding, $obj)) {
-                    var $aux = $holding.parent();
-                    $holding.appendTo($obj.parent());
-                    $holding.removeClass("badge-danger").addClass("badge-light");
-                    $getMainTBody().find(".badge-warning").removeClass("badge-warning").addClass("badge-light");
-                    $obj.appendTo($aux);
-                }
-            } else {
-                $obj.removeClass("badge-light").addClass("badge-danger");
-                $getMainTBody().find(".badge-primary").removeClass("badge-light").addClass("badge-warning");
-            }
-        }
-    })
+function generateSeats() {
+    $getMainTBody().empty();
+    for (var x = 0; x < getTotalSeats(); x++) {
+        $getTableRow().appendTo($getMainTBody());
+    }
 }
+
+

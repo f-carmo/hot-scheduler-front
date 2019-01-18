@@ -38,3 +38,20 @@ function $getMainTBody() {
 function $getReadyTeams() {
     return $("#team-table-body").find(".ready");
 }
+
+function getOccupation() {
+    let val = $("#occupation").val();
+    if (val > 100) val = 100;
+    if (val < 0) val = 0;
+    return val/100;
+}
+
+function $getWeekDaysClass() {
+    return [
+        '.seg',
+        '.ter',
+        '.qua',
+        '.qui',
+        '.sex'
+    ]
+}

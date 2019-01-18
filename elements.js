@@ -27,3 +27,19 @@ function $getSaveTeamButton() {
     $save.removeAttr("id");
     return $save;
 }
+
+function $getSwitchTableRow() {
+    var $str = $("#switch-table-row").clone();
+    $str.removeAttr("id");
+    return $str;
+}
+
+function $getSwitchTable() {
+    return $("#switch-table");
+}
+
+function $getCustomSwitchInput() {
+    var $csb = $("#custom-switch-button").clone();
+    $csb.removeAttr("id");
+    return $csb;
+}
