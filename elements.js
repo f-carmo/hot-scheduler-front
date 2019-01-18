@@ -10,6 +10,20 @@ function $getPill() {
     return $pill;
 }
 
+function $getSchedulePill() {
+    var $pill = $("#pill").clone();
+    $pill.removeAttr("id");
+    addHover($pill);
+    return $pill;
+}
+
+function $getSwitchTablePill() {
+    var $pill = $("#pill").clone();
+    $pill.removeAttr("id");
+    addSwitchTableEvent($pill);
+    return $pill;
+}
+
 function $getTeam() {
     var $team = $("#team").clone();
     $team.removeAttr("id");

@@ -1,8 +1,4 @@
 $(document).ready(function() {
-    //updateVariables();
-
-    $('[data-toggle="popover"]').popover();
-
     $(window).bind("beforeunload",function(event) {
         return ".";
     });
@@ -54,6 +50,7 @@ function removeTeam($removeBtn) {
     $removeBtn.parent().parent().remove();
     updateTeams();
 }
+
 function updateTeams() {
     teams = [];
     $.each($getReadyTeams(), (idx, obj) => {
@@ -71,19 +68,19 @@ function updateSwitchTable() {
     var $pill, $row;
     $getSwitchTable().find(".switch-table-row").remove();
     $.each(teams, (idx, obj) => {
-        $pill = $getPill().text(obj.teamName);
+        $pill = $getSwitchTablePill().text(obj.teamName);
         $row = $getSwitchTableRow();
-        addSwitchTableEvent($pill);
         $row.find("td").first().append($pill);
         $getSwitchTable().append($row);
     });
 
-    $pill = $getPill().text("Free");
+    //add "Free" team on the switch table
+    $pill = $getSwitchTablePill().text("Free");
     $row = $getSwitchTableRow();
-    addSwitchTableEvent($pill);
     $row.find("td").first().append($pill);
     $getSwitchTable().append($row);
 
+    //add custom team on the switch table
     $row = $getSwitchTableRow();
     $row.find("td").append($getCustomSwitchInput());
     $getSwitchTable().append($row);
@@ -103,7 +100,6 @@ function generate() {
         return false;
     }*/
 
-
     generateSeats();
     generateTeamSeats();
     var weekdaySlots, seatPool =[], $pillHolder;
@@ -118,8 +114,7 @@ function generate() {
         });
 
         $.each(weekdaySlots, (slotId, seat) => {
-            $pillHolder = $getPill();
-            addHover($pillHolder);
+            $pillHolder = $getSchedulePill();
             if (seatPool.length > 0) {
                 $(seat).append($pillHolder.text(seatPool.shift()))
             } else {
@@ -127,13 +122,6 @@ function generate() {
             }
         });
     });
-
-    /*
-    for (var y = 0; y < getTotalSeats(); y++) {
-        pillHolder = $getPill().text(getTeamNames()[counter%getTotalPeople()]);
-        addHover(pillHolder);
-        pillHolder.appendTo($(obj));
-    }*/
 }
 
 function generateSeats() {
