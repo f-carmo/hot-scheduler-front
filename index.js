@@ -60,6 +60,7 @@ function updateTeams() {
 
     updateSwitchTable();
     updateTotalPeople();
+    saveSettings();
 }
 
 function updateSwitchTable() {
