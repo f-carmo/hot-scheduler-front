@@ -121,6 +121,9 @@ function generate() {
                 $(seat).append($pillHolder.text("Free"))
             }
         });
+
+        seatPool = [];
+
     });
 }
 
