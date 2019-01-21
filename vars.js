@@ -1,8 +1,8 @@
-let teams = [];
+let _teams = [];
 
 function getTotalPeople() {
     let total = 0;
-    $.each(teams, (idx, obj) => {
+    $.each(_teams, (idx, obj) => {
         total += Number(obj.teamSize)
     });
 
@@ -11,7 +11,7 @@ function getTotalPeople() {
 
 function getTeamNames() {
     let names = [];
-    $.each(teams, (idx, obj) => {
+    $.each(_teams, (idx, obj) => {
         names.push(obj.teamName)
     });
 
@@ -31,6 +31,10 @@ function getTotalSeats() {
     return $("#total-seats").val();
 }
 
+function setTotalSeats(val) {
+    $("#total-seats").val(val);
+}
+
 function $getMainTBody() {
     return $("#main-tbody");
 }
@@ -39,11 +43,19 @@ function $getReadyTeams() {
     return $("#team-table-body").find(".ready");
 }
 
+function updateTotalPeople() {
+    $("#total-quantity").text(getTotalPeople() + " people");
+}
+
 function getOccupation() {
     let val = $("#occupation").val();
     if (val > 100) val = 100;
     if (val < 0) val = 0;
     return val/100;
+}
+
+function setOccupation(val) {
+    $("#occupation").val(val);
 }
 
 function $getWeekDaysClass() {

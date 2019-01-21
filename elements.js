@@ -30,6 +30,12 @@ function $getTeam() {
     return $team;
 }
 
+function $getLoadedTeam() {
+    var $team = $("#loaded-team").clone();
+    $team.removeAttr("id");
+    return $team;
+}
+
 function $getEditButton() {
     var $edit = $("#edit-button").clone();
     $edit.removeAttr("id");

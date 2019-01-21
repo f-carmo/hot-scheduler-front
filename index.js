@@ -2,11 +2,9 @@ $(document).ready(function() {
     $(window).bind("beforeunload",function(event) {
         return ".";
     });
+    verifyLocalStorage();
+    loadSettings();
 });
-
-function updateVariables() {
-    $("#total-quantity").text(getTotalPeople() + " people");
-}
 
 function addTeam() {
     $getTeam().insertBefore($("#add-team-button").parent());
@@ -52,22 +50,22 @@ function removeTeam($removeBtn) {
 }
 
 function updateTeams() {
-    teams = [];
+    _teams = [];
     $.each($getReadyTeams(), (idx, obj) => {
-        teams.push({
+        _teams.push({
             teamName: $(obj).find(".team-name").first().text(),
             teamSize: $(obj).find(".team-size").first().text()
         });
     });
 
     updateSwitchTable();
-    updateVariables();
+    updateTotalPeople();
 }
 
 function updateSwitchTable() {
     var $pill, $row;
     $getSwitchTable().find(".switch-table-row").remove();
-    $.each(teams, (idx, obj) => {
+    $.each(_teams, (idx, obj) => {
         $pill = $getSwitchTablePill().text(obj.teamName);
         $row = $getSwitchTableRow();
         $row.find("td").first().append($pill);
@@ -87,7 +85,7 @@ function updateSwitchTable() {
 }
 
 function generateTeamSeats() {
-    $.each(teams, (idx, obj) => {
+    $.each(_teams, (idx, obj) => {
         obj.teamSeats = Math.round(obj.teamSize / getTotalPeople() * getTotalSeats() * getOccupation());
         if (obj.teamSeats > obj.teamSize) obj.teamSeats = obj.teamSize;
     });
@@ -102,12 +100,13 @@ function generate() {
 
     generateSeats();
     generateTeamSeats();
+    saveSettings();
     var weekdaySlots, seatPool =[], $pillHolder;
 
     $.each($getWeekDaysClass(), (idx, obj) => {
         weekdaySlots = $getMainTBody().find(obj);
 
-        $.each(teams, (teamId, team) => {
+        $.each(_teams, (teamId, team) => {
             for (var x = 0; x < team.teamSeats; x++) {
                 seatPool.push(team.teamName);
             }
