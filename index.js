@@ -6,6 +6,11 @@ $(document).ready(function() {
     loadSettings();
 });
 
+function editTeamSettings($teamRef) {
+    $("#exampleModal").modal('show');
+    $("#modal-team-title").text($teamRef.parent().parent().find(".team-name").text() + " settings");
+}
+
 function addTeam() {
     $getTeam().insertBefore($("#add-team-button").parent());
 }
@@ -20,6 +25,7 @@ function saveTeam($saveBtn) {
     $saveBtn.closest(".not-ready").removeClass("not-ready").addClass("ready");
 
     $saveBtn.parent().append($getEditButton());
+    $saveBtn.parent().append($getTeamSettingsButton());
     $saveBtn.remove();
 
     updateTeams();

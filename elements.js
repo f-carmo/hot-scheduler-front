@@ -42,6 +42,12 @@ function $getEditButton() {
     return $edit;
 }
 
+function $getTeamSettingsButton() {
+    var $settings = $("#team-settings").clone();
+    $settings.removeAttr("id");
+    return $settings;
+}
+
 function $getSaveTeamButton() {
     var $save = $("#save-team-button").clone();
     $save.removeAttr("id");
