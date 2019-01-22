@@ -24,6 +24,10 @@ function $getSwitchTablePill() {
     return $pill;
 }
 
+function $getModalReference() {
+    return $("#exampleModal");
+}
+
 function $getTeam() {
     var $team = $("#team").clone();
     $team.removeAttr("id");

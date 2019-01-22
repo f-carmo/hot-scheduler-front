@@ -4,11 +4,31 @@ $(document).ready(function() {
     });
     verifyLocalStorage();
     loadSettings();
+
+    //validateNumberInput($("body").find("input[type='number']"));
 });
 
+function findTeamByName(teamName) {
+    let value = "";
+    $.each(_teams,(idx, obj) => {
+        if (obj.teamName === teamName) {
+            value = obj;
+        }
+    });
+
+    return value;
+}
+
 function editTeamSettings($teamRef) {
-    $("#exampleModal").modal('show');
-    $("#modal-team-title").text($teamRef.parent().parent().find(".team-name").text() + " settings");
+    const modal = $getModalReference();
+    const teamName = $teamRef.parent().parent().find(".team-name").text();
+    modal.modal('show');
+    modal.find("input").val(getOccupation());
+    $("#modal-team-title").text(teamName + " settings");
+
+    console.log(_teams);
+    findTeamByName(teamName).teamName = "test";
+    console.log(_teams);
 }
 
 function addTeam() {
@@ -40,6 +60,7 @@ function editTeam($editBtn) {
     $teamSize.empty();
 
     $editBtn.closest(".ready").removeClass("ready").addClass("not-ready");
+    $editBtn.parent().find(".fa-cog").remove();
 
     $("<input type='text' class='form-control'>").val(teamName).appendTo($teamName);
     $("<input type='number' class='form-control' min='1'>").val(teamSize).appendTo($teamSize);
@@ -93,7 +114,8 @@ function updateSwitchTable() {
 
 function generateTeamSeats() {
     $.each(_teams, (idx, obj) => {
-        obj.teamSeats = Math.round(obj.teamSize / getTotalPeople() * getTotalSeats() * getOccupation());
+        console.log(obj.teamSize / getTotalPeople() * getTotalSeats() * (getOccupation()/100))
+        obj.teamSeats = Math.round(obj.teamSize / getTotalPeople() * getTotalSeats() * (getOccupation()/100));
         if (obj.teamSeats > obj.teamSize) obj.teamSeats = obj.teamSize;
     });
 }

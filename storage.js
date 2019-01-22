@@ -16,7 +16,7 @@ function loadSettings() {
     }
 
     if (localStorage.getItem("hot-scheduler-occupation") !== null) {
-        setOccupation(localStorage.getItem("hot-scheduler-occupation") * 100);
+        setOccupation(localStorage.getItem("hot-scheduler-occupation"));
     }
 
     if (localStorage.getItem("hot-scheduler-available-seats") !== null) {

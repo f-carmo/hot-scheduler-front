@@ -39,11 +39,11 @@
                             <th>Team Size</th>
                             <th>Actions</th>
                         </tr>
-                    <tr style="cursor: pointer">
-                        <th class="text-center" colspan="3" onclick="addTeam()" id="add-team-button">
-                            Click to add team
-                        </th>
-                    </tr>
+                        <tr style="cursor: pointer">
+                            <th class="text-center" colspan="3" onclick="addTeam()" id="add-team-button">
+                                Click to add team
+                            </th>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -147,7 +147,35 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            ...
+                            <div class="row form-group">
+                                <table class="table">
+                                    <thead class="text-center">
+                                        <th colspan="2">Define variable occupation %</th>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>Monday</td>
+                                        <td><input type="number" min="0" max="100" class="form-control"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tuesday</td>
+                                        <td><input type="number" min="0" max="100" class="form-control"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Wednesday</td>
+                                        <td><input type="number" min="0" max="100" class="form-control"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Thursday</td>
+                                        <td><input type="number" min="0" max="100" class="form-control"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Friday</td>
+                                        <td><input type="number" min="0" max="100" class="form-control"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
