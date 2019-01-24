@@ -25,7 +25,7 @@ function $getSwitchTablePill() {
 }
 
 function $getModalReference() {
-    return $("#exampleModal");
+    return $("#team-settings-modal");
 }
 
 function $getTeam() {

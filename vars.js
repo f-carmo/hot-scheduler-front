@@ -59,12 +59,22 @@ function setOccupation(val) {
     $("#occupation").val(val);
 }
 
-function $getWeekDaysClass() {
+function getWeekDaysClass() {
     return [
         '.seg',
         '.ter',
         '.qua',
         '.qui',
         '.sex'
+    ]
+}
+
+function getWeekDaysNames() {
+    return [
+        'seg',
+        'ter',
+        'qua',
+        'qui',
+        'sex'
     ]
 }

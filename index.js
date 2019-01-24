@@ -22,13 +22,31 @@ function findTeamByName(teamName) {
 function editTeamSettings($teamRef) {
     const modal = $getModalReference();
     const teamName = $teamRef.parent().parent().find(".team-name").text();
+    const teamObjRef = findTeamByName(teamName);
     modal.modal('show');
-    modal.find("input").val(getOccupation());
+
+    if (typeof teamObjRef.variableOccupation !== "undefined") {
+        $.each(modal.find("input"), (idx, input) => {
+           $(input).val(teamObjRef.variableOccupation[idx]);
+        });
+    } else {
+        modal.find("input").val(getOccupation());
+    }
+
     $("#modal-team-title").text(teamName + " settings");
 
-    console.log(_teams);
-    findTeamByName(teamName).teamName = "test";
-    console.log(_teams);
+    $("#btn-save-team-changes").off().on('click', () => {
+        teamObjRef.variableOccupation = [
+            $("#vo-seg").val(),
+            $("#vo-ter").val(),
+            $("#vo-qua").val(),
+            $("#vo-qui").val(),
+            $("#vo-sex").val()
+        ];
+
+        $getModalReference().modal('hide');
+    });
+
 }
 
 function addTeam() {
@@ -113,10 +131,16 @@ function updateSwitchTable() {
 }
 
 function generateTeamSeats() {
-    $.each(_teams, (idx, obj) => {
-        console.log(obj.teamSize / getTotalPeople() * getTotalSeats() * (getOccupation()/100))
-        obj.teamSeats = Math.round(obj.teamSize / getTotalPeople() * getTotalSeats() * (getOccupation()/100));
-        if (obj.teamSeats > obj.teamSize) obj.teamSeats = obj.teamSize;
+    $.each(_teams, (idx, team) => {
+        if (typeof team.variableOccupation !== "undefined") {
+            team.teamSeats = [];
+            for (let x = 0; x < 5; x++) {
+                team.teamSeats.push(Math.round(team.teamSize / getTotalPeople() * getTotalSeats() * (Number(team.variableOccupation[x])/100)))
+            }
+        } else {
+            team.teamSeats = Math.round(team.teamSize / getTotalPeople() * getTotalSeats() * (getOccupation()/100));
+            if (team.teamSeats > team.teamSize) team.teamSeats = team.teamSize;
+        }
     });
 }
 
@@ -130,13 +154,15 @@ function generate() {
     generateSeats();
     generateTeamSeats();
     saveSettings();
+
     var weekdaySlots, seatPool =[], $pillHolder;
 
-    $.each($getWeekDaysClass(), (idx, obj) => {
+    $.each(getWeekDaysClass(), (idx, obj) => {
         weekdaySlots = $getMainTBody().find(obj);
 
         $.each(_teams, (teamId, team) => {
-            for (var x = 0; x < team.teamSeats; x++) {
+            let seatLimitation = team.teamSeats[idx] || team.teamSeats;
+            for (var x = 0; x < seatLimitation; x++) {
                 seatPool.push(team.teamName);
             }
         });
