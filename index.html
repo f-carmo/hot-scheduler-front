@@ -4,16 +4,19 @@
         <script src="resources/jquery-3.3.1.min.js"></script>
         <script src="resources/bootstrap.min.js"></script>
         <script src="resources/moment.js"></script>
+        <script src="resources/switchery.min.js"></script>
         <script src="vars.js"></script>
         <script src="validations.js"></script>
         <script src="export.js"></script>
         <script src="elements.js"></script>
         <script src="events.js"></script>
         <script src="storage.js"></script>
+        <script src="alerts.js"></script>
         <script src="index.js"></script>
         <link rel="stylesheet" type="text/css" href="index.css">
         <link rel="stylesheet" type="text/css" href="resources/bootstrap.min.css">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+        <link rel="stylesheet" href="resources/switchery.min.css">
     </head>
     <body>
         <div class="row form-group">
@@ -46,6 +49,9 @@
                         </tr>
                     </tbody>
                 </table>
+                <p id="alert-box">
+
+                </p>
             </div>
             <div class="col-md-3">
                 <div class="row form-group">
@@ -65,6 +71,12 @@
                                 <th>Occupation %</th>
                                 <td>
                                     <input id="occupation" class="form-control" type="number" min="0" max="100">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Ignore proportionality</th>
+                                <td>
+                                    <input id="proportionality" class="form-control js-switch" type="checkbox">
                                 </td>
                             </tr>
                         </tbody>

@@ -102,10 +102,13 @@ function findTeamById(teamId) {
 }
 
 function removeTeamById(teamId) {
+    let idxToRemove = undefined;
     $.each(_teams,(idx, obj) => {
         if (obj.teamId === Number(teamId)) {
+            idxToRemove = idx;
             console.log("removed:", obj)
-            _teams.splice(idx, 1);
         }
     });
+
+    if (typeof idxToRemove !== "undefined") _teams.splice(idxToRemove, 1);
 }

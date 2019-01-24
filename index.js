@@ -2,10 +2,12 @@ $(document).ready(function() {
     $(window).bind("beforeunload",function(event) {
         return ".";
     });
+
+    $.each($(".js-switch"), (idx, elem) => {
+        new Switchery(elem)
+    });
     verifyLocalStorage();
     loadSettings();
-
-    console.log("init: ", _teams)
 
     //validateNumberInput($("body").find("input[type='number']"));
 });
@@ -35,6 +37,7 @@ function editTeamSettings($teamRef) {
             $("#vo-sex").val()
         ];
 
+        saveSettings();
         $getModalReference().modal('hide');
     });
 
@@ -76,6 +79,8 @@ function saveTeam($saveBtn) {
     $saveBtn.remove();
 
     if (teamId !== "") {
+        let oldTeam = findTeamById(teamId);
+        newTeam.variableOccupation = oldTeam.variableOccupation;
         removeTeamById(teamId);
     }
 
@@ -111,7 +116,7 @@ function removeTeam($removeBtn) {
 }
 
 function updateSwitchTable() {
-    var $pill, $row;
+    let $pill, $row;
     $getSwitchTable().find(".switch-table-row").remove();
     $.each(_teams, (idx, obj) => {
         $pill = $getSwitchTablePill().text(obj.teamName);
@@ -133,17 +138,33 @@ function updateSwitchTable() {
 }
 
 function generateTeamSeats() {
-    $.each(_teams, (idx, team) => {
-        if (typeof team.variableOccupation !== "undefined") {
-            team.teamSeats = [];
-            for (let x = 0; x < 5; x++) {
-                team.teamSeats.push(Math.round(team.teamSize / getTotalPeople() * getTotalSeats() * (Number(team.variableOccupation[x])/100)))
+
+    if ($("#proportionality").is(":checked")) {
+        $.each(_teams, (idx, team) => {
+            if (typeof team.variableOccupation !== "undefined") {
+                team.teamSeats = [];
+                for (let x = 0; x < 5; x++) {
+                    team.teamSeats.push(Math.round(team.teamSize * (Number(team.variableOccupation[x])/100)))
+                }
+            } else {
+                team.teamSeats = Math.round(team.teamSize * (getOccupation()/100));
+                if (team.teamSeats > team.teamSize) team.teamSeats = team.teamSize;
             }
-        } else {
-            team.teamSeats = Math.round(team.teamSize / getTotalPeople() * getTotalSeats() * (getOccupation()/100));
-            if (team.teamSeats > team.teamSize) team.teamSeats = team.teamSize;
-        }
-    });
+        });
+    } else {
+        $.each(_teams, (idx, team) => {
+            if (typeof team.variableOccupation !== "undefined") {
+                team.teamSeats = [];
+                for (let x = 0; x < 5; x++) {
+                    team.teamSeats.push(Math.round(team.teamSize / getTotalPeople() * getTotalSeats() * (Number(team.variableOccupation[x])/100)));
+                }
+            } else {
+                team.teamSeats = Math.round(team.teamSize / getTotalPeople() * getTotalSeats() * (getOccupation()/100));
+                if (team.teamSeats > team.teamSize) team.teamSeats = team.teamSize;
+            }
+        });
+    }
+
 }
 
 function generate() {
@@ -157,14 +178,16 @@ function generate() {
     generateTeamSeats();
     saveSettings();
 
-    var weekdaySlots, seatPool =[], $pillHolder;
+    $("#alert-box").empty();
 
-    $.each(getWeekDaysClass(), (idx, obj) => {
-        weekdaySlots = $getMainTBody().find(obj);
+    let weekdaySlots, seatPool = [], $pillHolder;
+
+    $.each(getWeekDaysClass(), (idx, weekDayClass) => {
+        weekdaySlots = $getMainTBody().find(weekDayClass);
 
         $.each(_teams, (teamId, team) => {
             let seatLimitation = team.teamSeats[idx] || team.teamSeats;
-            for (var x = 0; x < seatLimitation; x++) {
+            for (let x = 0; x < seatLimitation; x++) {
                 seatPool.push(team.teamName);
             }
         });
@@ -178,6 +201,10 @@ function generate() {
             }
         });
 
+        if (seatPool.length > 0) {
+            addExcessAllocationMessage(weekDayClass)
+        }
+
         seatPool = [];
 
     });
@@ -185,9 +212,8 @@ function generate() {
 
 function generateSeats() {
     $getMainTBody().empty();
-    for (var x = 0; x < getTotalSeats(); x++) {
+    for (let x = 0; x < getTotalSeats(); x++) {
         $getTableRow().appendTo($getMainTBody());
     }
 }
-
 
