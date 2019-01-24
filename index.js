@@ -2,12 +2,12 @@ $(document).ready(function() {
     $(window).bind("beforeunload",function(event) {
         return ".";
     });
+    verifyLocalStorage();
+    loadSettings();
 
     $.each($(".js-switch"), (idx, elem) => {
         new Switchery(elem)
     });
-    verifyLocalStorage();
-    loadSettings();
 
     //validateNumberInput($("body").find("input[type='number']"));
 });
@@ -139,24 +139,17 @@ function updateSwitchTable() {
 
 function generateTeamSeats() {
 
-    if ($("#proportionality").is(":checked")) {
+    if ($("#ignore-team-settings").is(":checked")) {
         $.each(_teams, (idx, team) => {
-            if (typeof team.variableOccupation !== "undefined") {
-                team.teamSeats = [];
-                for (let x = 0; x < 5; x++) {
-                    team.teamSeats.push(Math.round(team.teamSize * (Number(team.variableOccupation[x])/100)))
-                }
-            } else {
-                team.teamSeats = Math.round(team.teamSize * (getOccupation()/100));
-                if (team.teamSeats > team.teamSize) team.teamSeats = team.teamSize;
-            }
+            team.teamSeats = Math.round(team.teamSize * (getOccupation()/100));
+            if (team.teamSeats > team.teamSize) team.teamSeats = team.teamSize;
         });
     } else {
         $.each(_teams, (idx, team) => {
             if (typeof team.variableOccupation !== "undefined") {
                 team.teamSeats = [];
                 for (let x = 0; x < 5; x++) {
-                    team.teamSeats.push(Math.round(team.teamSize / getTotalPeople() * getTotalSeats() * (Number(team.variableOccupation[x])/100)));
+                    team.teamSeats.push(Math.round(team.teamSize * (Number(team.variableOccupation[x])/100)));
                 }
             } else {
                 team.teamSeats = Math.round(team.teamSize / getTotalPeople() * getTotalSeats() * (getOccupation()/100));

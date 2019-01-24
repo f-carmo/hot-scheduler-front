@@ -23,6 +23,10 @@ function loadSettings() {
         setTotalSeats(localStorage.getItem("hot-scheduler-available-seats"));
     }
 
+    if (localStorage.getItem("hot-scheduler-ignore-team-settings") !== null) {
+        $("#ignore-team-settings").attr("checked", "checked");
+    }
+
     var teamHolder;
     $.each(savedTeams, (idx, obj) => {
         teamHolder = $getLoadedTeam();
@@ -47,9 +51,7 @@ function saveSettings() {
 
     localStorage.setItem("hot-scheduler-occupation", getOccupation());
     localStorage.setItem("hot-scheduler-available-seats", getTotalSeats());
-
-    console.log("saved: ", _teams);
-
+    localStorage.setItem("hot-scheduler-ignore-team-settings", $("#ignore-team-settings").is(":checked"));
     updateSwitchTable();
     updateTotalPeople();
 }
