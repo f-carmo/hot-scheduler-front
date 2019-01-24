@@ -141,7 +141,7 @@ function generateTeamSeats() {
 
     if ($("#ignore-team-settings").is(":checked")) {
         $.each(_teams, (idx, team) => {
-            team.teamSeats = Math.round(team.teamSize * (getOccupation()/100));
+            team.teamSeats = Math.round(team.teamSize / getTotalPeople() * getTotalSeats() * (getOccupation()/100));
             if (team.teamSeats > team.teamSize) team.teamSeats = team.teamSize;
         });
     } else {
