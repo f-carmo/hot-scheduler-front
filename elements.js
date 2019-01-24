@@ -73,3 +73,9 @@ function $getCustomSwitchInput() {
     $csb.removeAttr("id");
     return $csb;
 }
+
+function $getTeamMember() {
+    var $tm = $("#team-member").clone();
+    $tm.removeAttr("id");
+    return $tm;
+}

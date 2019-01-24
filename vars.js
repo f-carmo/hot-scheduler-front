@@ -78,3 +78,34 @@ function getWeekDaysNames() {
         'sex'
     ]
 }
+
+function findTeamByName(teamName) {
+    let value = "";
+    $.each(_teams,(idx, obj) => {
+        if (obj.teamName === teamName) {
+            value = obj;
+        }
+    });
+
+    return value;
+}
+
+function findTeamById(teamId) {
+    let value = undefined;
+    $.each(_teams,(idx, obj) => {
+        if (obj.teamId == teamId) {
+            value = obj;
+        }
+    });
+
+    return value;
+}
+
+function removeTeamById(teamId) {
+    $.each(_teams,(idx, obj) => {
+        if (obj.teamId === Number(teamId)) {
+            console.log("removed:", obj)
+            _teams.splice(idx, 1);
+        }
+    });
+}

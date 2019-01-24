@@ -98,7 +98,8 @@
         -->
         <div style="visibility: hidden">
             <i class="far fa-edit" id="edit-button" onclick="editTeam($(this))"></i>
-            <i class="fas fa-cog" id="team-settings" onclick="showTeamSettingsDialog($(this))"></i>
+            <i class="far fa-edit" id="edit-member-button" onclick="editMember($(this))"></i>
+            <i class="fas fa-cog" id="team-settings" onclick="editTeamSettings($(this))"></i>
 
             <i class="far fa-check-square" id="save-team-button" onclick="saveTeam($(this));"></i>
             <div class="input-group" id="custom-switch-button">
@@ -136,9 +137,16 @@
                         <i class="fas fa-cog" onclick="editTeamSettings($(this))"></i>
                     </td>
                 </tr>
+                <tr id="team-member" class="tm-not-ready">
+                    <th class="team-member-name"><input type="text" class="form-control"></th>
+                    <td style="font-size: 1.7em">
+                        <i class="far fa-window-close" onclick="removeTeamMember($(this))"></i>
+                        <i class="far fa-check-square" onclick="saveTeamMember($(this));"></i>
+                    </td>
+                </tr>
             </table>
             <div style="visibility: visible" class="modal fade" id="team-settings-modal">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="modal-team-title"></h5>
@@ -148,33 +156,53 @@
                         </div>
                         <div class="modal-body">
                             <div class="row form-group">
-                                <table class="table">
-                                    <thead class="text-center">
-                                        <th colspan="2">Define variable occupation %</th>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>Monday</td>
-                                        <td><input id="vo-seg" type="number" min="0" max="100" class="form-control"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tuesday</td>
-                                        <td><input id="vo-ter" type="number" min="0" max="100" class="form-control"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Wednesday</td>
-                                        <td><input id="vo-qua" type="number" min="0" max="100" class="form-control"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Thursday</td>
-                                        <td><input id="vo-qui" type="number" min="0" max="100" class="form-control"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Friday</td>
-                                        <td><input id="vo-sex" type="number" min="0" max="100" class="form-control"></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                <div class="col-md-6">
+                                    <table class="table">
+                                        <thead class="text-center">
+                                            <tr>
+                                                <th colspan="2">Define variable occupation %</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Monday</td>
+                                                <td><input id="vo-seg" type="number" min="0" max="100" class="form-control"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tuesday</td>
+                                                <td><input id="vo-ter" type="number" min="0" max="100" class="form-control"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Wednesday</td>
+                                                <td><input id="vo-qua" type="number" min="0" max="100" class="form-control"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Thursday</td>
+                                                <td><input id="vo-qui" type="number" min="0" max="100" class="form-control"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Friday</td>
+                                                <td><input id="vo-sex" type="number" min="0" max="100" class="form-control"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-6">
+                                    <table class="table">
+                                        <thead class="text-center">
+                                            <tr>
+                                                <th colspan="2">Define team members</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr style="cursor: pointer">
+                                                <th class="text-center" colspan="2" onclick="addTeamMember()" id="add-team-member-button">
+                                                    Click to add team member
+                                                </th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">

@@ -41,9 +41,15 @@ function saveSettings() {
     localStorage.clear();
 
     $.each(_teams, (idx, obj) => {
+        obj.teamId = idx;
         localStorage.setItem("hot-scheduler-team-"+idx, JSON.stringify(obj));
     });
 
     localStorage.setItem("hot-scheduler-occupation", getOccupation());
     localStorage.setItem("hot-scheduler-available-seats", getTotalSeats());
+
+    console.log("saved: ", _teams);
+
+    updateSwitchTable();
+    updateTotalPeople();
 }

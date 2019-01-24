@@ -5,19 +5,10 @@ $(document).ready(function() {
     verifyLocalStorage();
     loadSettings();
 
+    console.log("init: ", _teams)
+
     //validateNumberInput($("body").find("input[type='number']"));
 });
-
-function findTeamByName(teamName) {
-    let value = "";
-    $.each(_teams,(idx, obj) => {
-        if (obj.teamName === teamName) {
-            value = obj;
-        }
-    });
-
-    return value;
-}
 
 function editTeamSettings($teamRef) {
     const modal = $getModalReference();
@@ -53,9 +44,27 @@ function addTeam() {
     $getTeam().insertBefore($("#add-team-button").parent());
 }
 
+function addTeamMember() {
+    $getTeamMember().insertBefore($("#add-team-member-button").parent());
+}
+
+function removeTeamMember($btnRef) {
+    $btnRef.parent().parent().remove();
+}
+
+function saveTeamMember($btnRef) {
+    const $teamMemberName = $btnRef.parent().parent().find(".team-member-name").first().find("input");
+    $teamMemberName.parent().text($teamMemberName.val());
+}
+
 function saveTeam($saveBtn) {
     const $teamName = $saveBtn.parent().parent().find(".team-name").first().find("input");
     const $teamSize = $saveBtn.parent().parent().find(".team-size").first().find("input");
+    const teamId = $saveBtn.parent().parent().find("span").text();
+    const newTeam = {
+        teamName: $teamName.val(),
+        teamSize: $teamSize.val()
+    };
 
     $teamName.parent().text($teamName.val());
     $teamSize.parent().text($teamSize.val());
@@ -66,7 +75,12 @@ function saveTeam($saveBtn) {
     $saveBtn.parent().append($getTeamSettingsButton());
     $saveBtn.remove();
 
-    updateTeams();
+    if (teamId !== "") {
+        removeTeamById(teamId);
+    }
+
+    _teams.push(newTeam);
+    saveSettings();
 }
 
 function editTeam($editBtn) {
@@ -74,6 +88,7 @@ function editTeam($editBtn) {
     const $teamSize = $editBtn.parent().parent().find(".team-size").first();
     const teamName = $teamName.text();
     const teamSize = $teamSize.text();
+    const teamObjRef = findTeamByName(teamName);
     $teamName.empty();
     $teamSize.empty();
 
@@ -82,29 +97,16 @@ function editTeam($editBtn) {
 
     $("<input type='text' class='form-control'>").val(teamName).appendTo($teamName);
     $("<input type='number' class='form-control' min='1'>").val(teamSize).appendTo($teamSize);
+    $("<span style='display: none;'></span>").text(teamObjRef.teamId).appendTo($teamSize.parent());
 
     $editBtn.parent().append($getSaveTeamButton());
     $editBtn.remove();
-
-    updateTeams();
 }
 
 function removeTeam($removeBtn) {
+    const teamId = findTeamByName($removeBtn.parent().parent().find(".team-name").text()).teamId;
+    removeTeamById(teamId);
     $removeBtn.parent().parent().remove();
-    updateTeams();
-}
-
-function updateTeams() {
-    _teams = [];
-    $.each($getReadyTeams(), (idx, obj) => {
-        _teams.push({
-            teamName: $(obj).find(".team-name").first().text(),
-            teamSize: $(obj).find(".team-size").first().text()
-        });
-    });
-
-    updateSwitchTable();
-    updateTotalPeople();
     saveSettings();
 }
 
