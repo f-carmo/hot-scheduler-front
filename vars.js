@@ -112,3 +112,12 @@ function removeTeamById(teamId) {
 
     if (typeof idxToRemove !== "undefined") _teams.splice(idxToRemove, 1);
 }
+
+function getEditingTeamName() {
+    return $getModalTitleRef().find("span").text();
+}
+
+function setMemberDistribution($checkboxRef) {
+    let teamObjRef = findTeamByName(getEditingTeamName());
+    teamObjRef["distributeMembers"] = $checkboxRef.is(":checked");
+}

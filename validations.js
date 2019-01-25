@@ -28,3 +28,9 @@ function validateSwitch($objA, $target) {
 
     return true;
 }
+
+function isDuplicateSeat($seat, name) {
+    let day = $seat.parent().attr("class");
+
+    return !!$("."+day+":contains('"+name+"')").length;
+}

@@ -9,6 +9,7 @@ $(document).ready(function() {
         new Switchery(elem)
     });
 
+    console.log(_teams);
     //validateNumberInput($("body").find("input[type='number']"));
 });
 
@@ -16,6 +17,7 @@ function editTeamSettings($teamRef) {
     const modal = $getModalReference();
     const teamName = $teamRef.parent().parent().find(".team-name").text();
     const teamObjRef = findTeamByName(teamName);
+    $getModalReference().find(".tm-not-ready").remove();
     modal.modal('show');
 
     if (typeof teamObjRef.variableOccupation !== "undefined") {
@@ -26,7 +28,26 @@ function editTeamSettings($teamRef) {
         modal.find("input").val(getOccupation());
     }
 
-    $("#modal-team-title").text(teamName + " settings");
+    $getModalTitleRef().text(teamName + " settings");
+    $("<span style='display: none'></span>").text(teamName).appendTo($getModalTitleRef());
+
+    let memberHold;
+    $.each(teamObjRef.teamMembers, (idx, obj) => {
+        memberHold = $getTeamMember();
+        memberHold.find(".team-member-name").text(obj);
+        memberHold.find(".fa-check-square").remove();
+        memberHold.insertBefore($("#add-team-member-button").parent());
+    });
+
+    if (!!teamObjRef.distributeMembers) {
+        if (!modal.find(".js-switch").is(":checked")) {
+            modal.find(".js-switch").trigger('click');
+        }
+    } else {
+        if (modal.find(".js-switch").is(":checked")) {
+            modal.find(".js-switch").trigger('click');
+        }
+    }
 
     $("#btn-save-team-changes").off().on('click', () => {
         teamObjRef.variableOccupation = [
@@ -40,24 +61,50 @@ function editTeamSettings($teamRef) {
         saveSettings();
         $getModalReference().modal('hide');
     });
-
 }
 
 function addTeam() {
     $getTeam().insertBefore($("#add-team-button").parent());
 }
 
-function addTeamMember() {
-    $getTeamMember().insertBefore($("#add-team-member-button").parent());
+function addTeamMember($addBtnRef) {
+    const team = findTeamByName(getEditingTeamName());
+    const members = $addBtnRef.parent().parent().find("tr").length;
+
+    if (members > team.teamSize) {
+        alert("Team size reached. Remove members to continue");
+    } else {
+        $getTeamMember().insertBefore($("#add-team-member-button").parent());
+    }
+
 }
 
 function removeTeamMember($btnRef) {
+    const teamMemberName = $btnRef.parent().parent().find("td").first().text();
+    removeTeamMemberByName(teamMemberName, findTeamByName(getEditingTeamName()));
     $btnRef.parent().parent().remove();
 }
 
+function removeTeamMemberByName(teamMemberName, team) {
+    team.teamMembers.splice(team.teamMembers.indexOf(teamMemberName), 1)
+    saveSettings();
+}
+
 function saveTeamMember($btnRef) {
+    const team = findTeamByName(getEditingTeamName());
     const $teamMemberName = $btnRef.parent().parent().find(".team-member-name").first().find("input");
-    $teamMemberName.parent().text($teamMemberName.val());
+    const teamMemberName = $teamMemberName.val();
+    $teamMemberName.parent().text(teamMemberName);
+
+    if (typeof team.teamMembers === "undefined") {
+        team.teamMembers = [];
+    }
+
+    team.teamMembers.push(teamMemberName);
+
+    $btnRef.remove();
+
+    saveSettings();
 }
 
 function saveTeam($saveBtn) {
@@ -81,6 +128,8 @@ function saveTeam($saveBtn) {
     if (teamId !== "") {
         let oldTeam = findTeamById(teamId);
         newTeam.variableOccupation = oldTeam.variableOccupation;
+        newTeam.teamMembers = oldTeam.teamMembers;
+        newTeam.distributeMembers = oldTeam.distributeMembers;
         removeTeamById(teamId);
     }
 
@@ -99,6 +148,7 @@ function editTeam($editBtn) {
 
     $editBtn.closest(".ready").removeClass("ready").addClass("not-ready");
     $editBtn.parent().find(".fa-cog").remove();
+    $editBtn.parent().parent().find(".js-switch").parent().empty();
 
     $("<input type='text' class='form-control'>").val(teamName).appendTo($teamName);
     $("<input type='number' class='form-control' min='1'>").val(teamSize).appendTo($teamSize);
@@ -199,7 +249,20 @@ function generate() {
         }
 
         seatPool = [];
+    });
 
+    let teamSeats;
+    $.each(_teams, (teamId, team) => {
+        if (typeof team.teamMembers === "undefined" || !team.distributeMembers) return;
+        teamSeats = $("span:contains('"+team.teamName+"')");
+        let counter = 0;
+        $.each(teamSeats, (idx, seat) => {
+            if (isDuplicateSeat($(seat), team.teamMembers[counter%team.teamMembers.length])) {
+                counter++;
+            } else {
+                $(seat).text(team.teamMembers[counter++%team.teamMembers.length])
+            }
+        });
     });
 }
 

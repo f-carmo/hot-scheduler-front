@@ -43,7 +43,7 @@
                             <th>Actions</th>
                         </tr>
                         <tr style="cursor: pointer">
-                            <th class="text-center" colspan="3" onclick="addTeam()" id="add-team-button">
+                            <th class="text-center" colspan="4" onclick="addTeam()" id="add-team-button">
                                 Click to add team
                             </th>
                         </tr>
@@ -148,6 +148,7 @@
                         <i class="far fa-edit" onclick="editTeam($(this))"></i>
                         <i class="fas fa-cog" onclick="editTeamSettings($(this))"></i>
                     </td>
+
                 </tr>
                 <tr id="team-member" class="tm-not-ready">
                     <th class="team-member-name"><input type="text" class="form-control"></th>
@@ -169,13 +170,14 @@
                         <div class="modal-body">
                             <div class="row form-group">
                                 <div class="col-md-6">
-                                    <table class="table">
-                                        <thead class="text-center">
+                                    <div class="row">
+                                        <table class="table">
+                                            <thead class="text-center">
                                             <tr>
                                                 <th colspan="2">Define variable occupation %</th>
                                             </tr>
-                                        </thead>
-                                        <tbody>
+                                            </thead>
+                                            <tbody>
                                             <tr>
                                                 <td>Monday</td>
                                                 <td><input id="vo-seg" type="number" min="0" max="100" class="form-control"></td>
@@ -196,8 +198,24 @@
                                                 <td>Friday</td>
                                                 <td><input id="vo-sex" type="number" min="0" max="100" class="form-control"></td>
                                             </tr>
-                                        </tbody>
-                                    </table>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="row">
+                                        <table class="table">
+                                            <thead class="text-center">
+                                            <tr>
+                                                <th colspan="2">Other settings</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <th>Distribute team members?</th>
+                                                <td><input class="form-control js-switch" type="checkbox" onchange="setMemberDistribution($(this))" value="1"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
                                     <table class="table">
@@ -206,9 +224,9 @@
                                                 <th colspan="2">Define team members</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="team-member-table">
                                             <tr style="cursor: pointer">
-                                                <th class="text-center" colspan="2" onclick="addTeamMember()" id="add-team-member-button">
+                                                <th class="text-center" colspan="2" onclick="addTeamMember($(this))" id="add-team-member-button">
                                                     Click to add team member
                                                 </th>
                                             </tr>

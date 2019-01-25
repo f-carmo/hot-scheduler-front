@@ -79,3 +79,13 @@ function $getTeamMember() {
     $tm.removeAttr("id");
     return $tm;
 }
+
+function $getModalTitleRef() {
+    return $("#modal-team-title");
+}
+
+function $getDistributeMembersCheckbox() {
+    var $dmcb = $("#distribute-members-cb").clone();
+    $dmcb.removeAttr("id");
+    return $dmcb;
+}
