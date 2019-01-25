@@ -253,7 +253,7 @@ function generate() {
     let teamSeats;
     $.each(_teams, (teamId, team) => {
         if (typeof team.teamMembers === "undefined" || !team.distributeMembers) return;
-        teamSeats = $("span:contains('"+team.teamName+"')");
+        teamSeats = $("#main-tbody span:contains('"+team.teamName+"')");
         let counter = 0;
         $.each(teamSeats, (idx, seat) => {
             if (isDuplicateSeat($(seat), team.teamMembers[counter%team.teamMembers.length])) {
