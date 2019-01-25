@@ -4,16 +4,19 @@
         <script src="resources/jquery-3.3.1.min.js"></script>
         <script src="resources/bootstrap.min.js"></script>
         <script src="resources/moment.js"></script>
+        <script src="resources/switchery.min.js"></script>
         <script src="vars.js"></script>
         <script src="validations.js"></script>
         <script src="export.js"></script>
         <script src="elements.js"></script>
         <script src="events.js"></script>
         <script src="storage.js"></script>
+        <script src="alerts.js"></script>
         <script src="index.js"></script>
         <link rel="stylesheet" type="text/css" href="index.css">
         <link rel="stylesheet" type="text/css" href="resources/bootstrap.min.css">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+        <link rel="stylesheet" href="resources/switchery.min.css">
     </head>
     <body>
         <div class="row form-group">
@@ -40,12 +43,15 @@
                             <th>Actions</th>
                         </tr>
                         <tr style="cursor: pointer">
-                            <th class="text-center" colspan="3" onclick="addTeam()" id="add-team-button">
+                            <th class="text-center" colspan="4" onclick="addTeam()" id="add-team-button">
                                 Click to add team
                             </th>
                         </tr>
                     </tbody>
                 </table>
+                <p id="alert-box">
+
+                </p>
             </div>
             <div class="col-md-3">
                 <div class="row form-group">
@@ -65,6 +71,12 @@
                                 <th>Occupation %</th>
                                 <td>
                                     <input id="occupation" class="form-control" type="number" min="0" max="100">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Ignore team settings</th>
+                                <td>
+                                    <input id="ignore-team-settings" class="form-control js-switch" type="checkbox">
                                 </td>
                             </tr>
                         </tbody>
@@ -98,7 +110,8 @@
         -->
         <div style="visibility: hidden">
             <i class="far fa-edit" id="edit-button" onclick="editTeam($(this))"></i>
-            <i class="fas fa-cog" id="team-settings" onclick="showTeamSettingsDialog($(this))"></i>
+            <i class="far fa-edit" id="edit-member-button" onclick="editMember($(this))"></i>
+            <i class="fas fa-cog" id="team-settings" onclick="editTeamSettings($(this))"></i>
 
             <i class="far fa-check-square" id="save-team-button" onclick="saveTeam($(this));"></i>
             <div class="input-group" id="custom-switch-button">
@@ -135,10 +148,18 @@
                         <i class="far fa-edit" onclick="editTeam($(this))"></i>
                         <i class="fas fa-cog" onclick="editTeamSettings($(this))"></i>
                     </td>
+
+                </tr>
+                <tr id="team-member" class="tm-not-ready">
+                    <th class="team-member-name"><input type="text" class="form-control"></th>
+                    <td style="font-size: 1.7em">
+                        <i class="far fa-window-close" onclick="removeTeamMember($(this))"></i>
+                        <i class="far fa-check-square" onclick="saveTeamMember($(this));"></i>
+                    </td>
                 </tr>
             </table>
             <div style="visibility: visible" class="modal fade" id="team-settings-modal">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="modal-team-title"></h5>
@@ -148,33 +169,70 @@
                         </div>
                         <div class="modal-body">
                             <div class="row form-group">
-                                <table class="table">
-                                    <thead class="text-center">
-                                        <th colspan="2">Define variable occupation %</th>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>Monday</td>
-                                        <td><input id="vo-seg" type="number" min="0" max="100" class="form-control"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tuesday</td>
-                                        <td><input id="vo-ter" type="number" min="0" max="100" class="form-control"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Wednesday</td>
-                                        <td><input id="vo-qua" type="number" min="0" max="100" class="form-control"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Thursday</td>
-                                        <td><input id="vo-qui" type="number" min="0" max="100" class="form-control"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Friday</td>
-                                        <td><input id="vo-sex" type="number" min="0" max="100" class="form-control"></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <table class="table">
+                                            <thead class="text-center">
+                                            <tr>
+                                                <th colspan="2">Define variable occupation %</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td>Monday</td>
+                                                <td><input id="vo-seg" type="number" min="0" max="100" class="form-control"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tuesday</td>
+                                                <td><input id="vo-ter" type="number" min="0" max="100" class="form-control"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Wednesday</td>
+                                                <td><input id="vo-qua" type="number" min="0" max="100" class="form-control"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Thursday</td>
+                                                <td><input id="vo-qui" type="number" min="0" max="100" class="form-control"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Friday</td>
+                                                <td><input id="vo-sex" type="number" min="0" max="100" class="form-control"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="row">
+                                        <table class="table">
+                                            <thead class="text-center">
+                                            <tr>
+                                                <th colspan="2">Other settings</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <th>Distribute team members?</th>
+                                                <td><input class="form-control js-switch" type="checkbox" onchange="setMemberDistribution($(this))" value="1"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <table class="table">
+                                        <thead class="text-center">
+                                            <tr>
+                                                <th colspan="2">Define team members</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="team-member-table">
+                                            <tr style="cursor: pointer">
+                                                <th class="text-center" colspan="2" onclick="addTeamMember($(this))" id="add-team-member-button">
+                                                    Click to add team member
+                                                </th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">

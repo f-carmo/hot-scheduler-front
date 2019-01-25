@@ -78,3 +78,46 @@ function getWeekDaysNames() {
         'sex'
     ]
 }
+
+function findTeamByName(teamName) {
+    let value = "";
+    $.each(_teams,(idx, obj) => {
+        if (obj.teamName === teamName) {
+            value = obj;
+        }
+    });
+
+    return value;
+}
+
+function findTeamById(teamId) {
+    let value = undefined;
+    $.each(_teams,(idx, obj) => {
+        if (obj.teamId == teamId) {
+            value = obj;
+        }
+    });
+
+    return value;
+}
+
+function removeTeamById(teamId) {
+    let idxToRemove = undefined;
+    $.each(_teams,(idx, obj) => {
+        if (obj.teamId === Number(teamId)) {
+            idxToRemove = idx;
+            console.log("removed:", obj)
+        }
+    });
+
+    if (typeof idxToRemove !== "undefined") _teams.splice(idxToRemove, 1);
+}
+
+function getEditingTeamName() {
+    return $getModalTitleRef().find("span").text();
+}
+
+function setMemberDistribution($checkboxRef) {
+    let teamObjRef = findTeamByName(getEditingTeamName());
+    teamObjRef["distributeMembers"] = $checkboxRef.is(":checked");
+}
