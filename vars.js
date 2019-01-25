@@ -1,5 +1,6 @@
 let _teams = [];
 
+
 function getTotalPeople() {
     let total = 0;
     $.each(_teams, (idx, obj) => {
@@ -51,14 +52,14 @@ function getOccupation() {
     let val = $("#occupation").val();
     if (val > 100) val = 100;
     if (val < 0) val = 0;
-    return val/100;
+    return val;
 }
 
 function setOccupation(val) {
     $("#occupation").val(val);
 }
 
-function $getWeekDaysClass() {
+function getWeekDaysClass() {
     return [
         '.seg',
         '.ter',
@@ -66,4 +67,57 @@ function $getWeekDaysClass() {
         '.qui',
         '.sex'
     ]
+}
+
+function getWeekDaysNames() {
+    return [
+        'seg',
+        'ter',
+        'qua',
+        'qui',
+        'sex'
+    ]
+}
+
+function findTeamByName(teamName) {
+    let value = "";
+    $.each(_teams,(idx, obj) => {
+        if (obj.teamName === teamName) {
+            value = obj;
+        }
+    });
+
+    return value;
+}
+
+function findTeamById(teamId) {
+    let value = undefined;
+    $.each(_teams,(idx, obj) => {
+        if (obj.teamId == teamId) {
+            value = obj;
+        }
+    });
+
+    return value;
+}
+
+function removeTeamById(teamId) {
+    let idxToRemove = undefined;
+    $.each(_teams,(idx, obj) => {
+        if (obj.teamId === Number(teamId)) {
+            idxToRemove = idx;
+            console.log("removed:", obj)
+        }
+    });
+
+    if (typeof idxToRemove !== "undefined") _teams.splice(idxToRemove, 1);
+}
+
+function getEditingTeamName() {
+    return $getModalTitleRef().find("span").text();
+}
+
+function setMemberDistribution($checkboxRef) {
+    let teamObjRef = findTeamByName(getEditingTeamName());
+    teamObjRef["distributeMembers"] = $checkboxRef.is(":checked");
 }

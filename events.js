@@ -60,3 +60,19 @@ function switchCustom($saveBtn) {
         $getMainTBody().find(".badge-warning").removeClass("badge-warning").addClass("badge-light");
     }
 }
+
+function validateNumberInput($input) {
+    $input.off('change');
+
+    $input.on('change', (e) => {
+        const changedTo = $(e.target).val();
+
+        if ($(e.target).attr("max") < changedTo) {
+            $(e.target).val($(e.target).attr("max"));
+        }
+
+        if ($(e.target).attr("min") > changedTo) {
+            $(e.target).val($(e.target).attr("min"));
+        }
+    });
+}

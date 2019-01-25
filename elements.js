@@ -24,6 +24,10 @@ function $getSwitchTablePill() {
     return $pill;
 }
 
+function $getModalReference() {
+    return $("#team-settings-modal");
+}
+
 function $getTeam() {
     var $team = $("#team").clone();
     $team.removeAttr("id");
@@ -40,6 +44,12 @@ function $getEditButton() {
     var $edit = $("#edit-button").clone();
     $edit.removeAttr("id");
     return $edit;
+}
+
+function $getTeamSettingsButton() {
+    var $settings = $("#team-settings").clone();
+    $settings.removeAttr("id");
+    return $settings;
 }
 
 function $getSaveTeamButton() {
@@ -62,4 +72,20 @@ function $getCustomSwitchInput() {
     var $csb = $("#custom-switch-button").clone();
     $csb.removeAttr("id");
     return $csb;
+}
+
+function $getTeamMember() {
+    var $tm = $("#team-member").clone();
+    $tm.removeAttr("id");
+    return $tm;
+}
+
+function $getModalTitleRef() {
+    return $("#modal-team-title");
+}
+
+function $getDistributeMembersCheckbox() {
+    var $dmcb = $("#distribute-members-cb").clone();
+    $dmcb.removeAttr("id");
+    return $dmcb;
 }
