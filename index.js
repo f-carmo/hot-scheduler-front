@@ -9,7 +9,6 @@ $(document).ready(function() {
         new Switchery(elem)
     });
 
-    console.log(_teams);
     //validateNumberInput($("body").find("input[type='number']"));
 });
 
