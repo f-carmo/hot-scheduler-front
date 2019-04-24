@@ -26,15 +26,17 @@ function createJSON(opt) {
     var json = [];
     var nextWeekDates = mapNextWeek(opt);
     $.each($slotting, (idx, obj) => {
-        json.push({
-            'summary': $(obj).text(),
-            'start': {
-                'date': nextWeekDates[$(obj).prop("className")]
-            },
-            'end': {
-                'date': nextWeekDates[$(obj).prop("className")]
-            }
-        })
+        if ($(obj).text() != "Free") {
+            json.push({
+                'summary': $(obj).text(),
+                'start': {
+                    'date': nextWeekDates[$(obj).prop("className")]
+                },
+                'end': {
+                    'date': nextWeekDates[$(obj).prop("className")]
+                }
+            })
+        }
     });
 
     return json;

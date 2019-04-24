@@ -126,9 +126,9 @@ function saveTeam($saveBtn) {
 
     if (teamId !== "") {
         let oldTeam = findTeamById(teamId);
-        newTeam.variableOccupation = oldTeam.variableOccupation;
-        newTeam.teamMembers = oldTeam.teamMembers;
-        newTeam.distributeMembers = oldTeam.distributeMembers;
+        newTeam.variableOccupation = oldTeam["variableOccupation"];
+        newTeam.teamMembers = oldTeam["teamMembers"];
+        newTeam.distributeMembers = oldTeam["distributeMembers"];
         removeTeamById(teamId);
     }
 
@@ -148,6 +148,7 @@ function editTeam($editBtn) {
     $editBtn.closest(".ready").removeClass("ready").addClass("not-ready");
     $editBtn.parent().find(".fa-cog").remove();
     $editBtn.parent().parent().find(".js-switch").parent().empty();
+    $editBtn.parent().parent().find("span").remove();
 
     $("<input type='text' class='form-control'>").val(teamName).appendTo($teamName);
     $("<input type='number' class='form-control' min='1'>").val(teamSize).appendTo($teamSize);
@@ -254,7 +255,7 @@ function generate() {
     $.each(_teams, (teamId, team) => {
         if (typeof team.teamMembers === "undefined" || !team.distributeMembers) return;
         teamSeats = $("#main-tbody span:contains('"+team.teamName+"')");
-        let counter = 0;
+        let counter = Math.floor(Math.random() * Math.floor(team.teamMembers.length));
         $.each(teamSeats, (idx, seat) => {
             if (isDuplicateSeat($(seat), team.teamMembers[counter%team.teamMembers.length])) {
                 counter++;
