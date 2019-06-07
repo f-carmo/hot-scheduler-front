@@ -79,7 +79,7 @@ function addTeamMember($addBtnRef) {
 }
 
 function removeTeamMember($btnRef) {
-    const teamMemberName = $btnRef.parent().parent().find("td").first().text();
+    const teamMemberName = $btnRef.parent().parent().find("th").first().text();
     removeTeamMemberByName(teamMemberName, findTeamByName(getEditingTeamName()));
     $btnRef.parent().parent().remove();
 }
