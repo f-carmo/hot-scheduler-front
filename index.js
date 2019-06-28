@@ -12,6 +12,10 @@ $(document).ready(function() {
     //validateNumberInput($("body").find("input[type='number']"));
 });
 
+function removePins() {
+    $getMainTBody().find(".badge-success").removeClass("badge-success");
+}
+
 function editTeamSettings($teamRef) {
     const modal = $getModalReference();
     const teamName = $teamRef.parent().parent().find(".team-name").text();
@@ -240,27 +244,6 @@ function generate() {
         $.each(weekdaySlots, (slotId, seat) => {
             $pillHolder = $getSchedulePill();
 
-            /*pinnedNames.find((element) => {
-                if (element.weekDay == weekDayClass) {
-                    console.log(element);
-                    $(seat).append($pillHolder.text(element.name));
-                    pinnedNames.splice(pinnedNames.indexOf(element));
-                    $pillHolder.addClass("badge-success").removeClass("badge-light");
-                    seatPool.shift();
-                }
-            });*/
-
-            /*if (pinnedNames.length > 0) {
-                $.each(pinnedNames.find((element) => {
-                    return element.weekDay == weekDayClass
-                }), (index, name) => {
-                    if (name.weekDay = weekDayClass) {
-                        $(seat).append($pillHolder.text(name.name));
-                        $pillHolder.addClass("badge-success").removeClass("badge-light");
-                        seatPool.shift();
-                    }
-                });
-            }*/
             if (seatPool.length > 0) {
                 if (typeof pinnedNames[weekDayName] !== "undefined" && pinnedNames[weekDayName].length > 0) {
                     $(seat).append($pillHolder.text(pinnedNames[weekDayName].shift()));
@@ -288,7 +271,7 @@ function generate() {
         let counter = Math.floor(Math.random() * Math.floor(team.teamMembers.length));
         $.each(teamSeats, (idx, seat) => {
             if (isDuplicateSeat($(seat), team.teamMembers[counter%team.teamMembers.length])) {
-                counter++;
+                $(seat).text(team.teamMembers[++counter%team.teamMembers.length])
             } else {
                 $(seat).text(team.teamMembers[counter++%team.teamMembers.length])
             }

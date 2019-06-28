@@ -106,7 +106,6 @@ function removeTeamById(teamId) {
     $.each(_teams,(idx, obj) => {
         if (obj.teamId === Number(teamId)) {
             idxToRemove = idx;
-            console.log("removed:", obj)
         }
     });
 
@@ -136,6 +135,5 @@ function getPinnedNames() {
         pinnedNames[$obj.parent().attr("class")].push($obj.text());
     });
 
-    console.log(pinnedNames);
     return pinnedNames;
 }
