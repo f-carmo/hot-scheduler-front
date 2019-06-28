@@ -121,3 +121,21 @@ function setMemberDistribution($checkboxRef) {
     let teamObjRef = findTeamByName(getEditingTeamName());
     teamObjRef["distributeMembers"] = $checkboxRef.is(":checked");
 }
+
+function getPinnedNames() {
+    const pinnedNames = [];
+    let $obj = null;
+    
+    $.each($getMainTBody().find(".badge-success"), (idx, obj) => {
+        $obj = $(obj);
+
+        if (typeof pinnedNames[$obj.parent().attr("class")] === "undefined") {
+            pinnedNames[$obj.parent().attr("class")] = [];
+        }
+
+        pinnedNames[$obj.parent().attr("class")].push($obj.text());
+    });
+
+    console.log(pinnedNames);
+    return pinnedNames;
+}

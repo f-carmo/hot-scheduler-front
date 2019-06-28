@@ -17,23 +17,35 @@ function addHover($obj) {
         $getMainTBody()
             .find(".badge-warning")
             .removeClass("badge-light");
+            
+        $getMainTBody()
+            .find(".badge-success")
+            .removeClass("badge-light");
     });
 
     $obj.click(() => {
-        if ($obj.hasClass("badge-danger") || $obj.hasClass("badge-warning")) {
-            $getMainTBody().find(".badge-danger").removeClass("badge-danger").addClass("badge-light");
-            $getMainTBody().find(".badge-warning").removeClass("badge-warning").addClass("badge-light");
-        } else {
-            var $holding = $getMainTBody().find(".badge-danger");
-            if ($holding.length > 0) {
-                var $aux = $holding.parent();
-                $holding.appendTo($obj.parent());
-                $holding.removeClass("badge-danger").addClass("badge-light");
-                $getMainTBody().find(".badge-warning").removeClass("badge-warning").addClass("badge-light");
-                $obj.appendTo($aux);
+        if ($("#pin-on-click").is(":checked")) {
+            if ($obj.hasClass("badge-success")) {
+                $obj.removeClass("badge-success").addClass("badge-light");
             } else {
-                $obj.removeClass("badge-light").addClass("badge-danger");
-                $getMainTBody().find(".badge-primary").removeClass("badge-light").addClass("badge-warning");
+                $obj.removeClass("badge-light").addClass("badge-success");
+            }
+        } else {
+            if ($obj.hasClass("badge-danger") || $obj.hasClass("badge-warning")) {
+                $getMainTBody().find(".badge-danger").removeClass("badge-danger").addClass("badge-light");
+                $getMainTBody().find(".badge-warning").removeClass("badge-warning").addClass("badge-light");
+            } else {
+                var $holding = $getMainTBody().find(".badge-danger");
+                if ($holding.length > 0) {
+                    var $aux = $holding.parent();
+                    $holding.appendTo($obj.parent());
+                    $holding.removeClass("badge-danger").addClass("badge-light");
+                    $getMainTBody().find(".badge-warning").removeClass("badge-warning").addClass("badge-light");
+                    $obj.appendTo($aux);
+                } else {
+                    $obj.removeClass("badge-light").addClass("badge-danger");
+                    $getMainTBody().find(".badge-primary").removeClass("badge-light").addClass("badge-warning");
+                }
             }
         }
     })

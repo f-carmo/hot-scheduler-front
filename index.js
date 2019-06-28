@@ -217,16 +217,18 @@ function generate() {
         return false;
     }*/
 
+    const pinnedNames = getPinnedNames();
     generateSeats();
     generateTeamSeats();
     saveSettings();
 
     $("#alert-box").empty();
 
-    let weekdaySlots, seatPool = [], $pillHolder;
+    let weekdaySlots, seatPool = [], $pillHolder, weekDayName;
 
     $.each(getWeekDaysClass(), (idx, weekDayClass) => {
         weekdaySlots = $getMainTBody().find(weekDayClass);
+        weekDayName = weekDayClass.substring(1);
 
         $.each(_teams, (teamId, team) => {
             let seatLimitation = team.teamSeats[idx] || team.teamSeats;
@@ -237,15 +239,43 @@ function generate() {
 
         $.each(weekdaySlots, (slotId, seat) => {
             $pillHolder = $getSchedulePill();
+
+            /*pinnedNames.find((element) => {
+                if (element.weekDay == weekDayClass) {
+                    console.log(element);
+                    $(seat).append($pillHolder.text(element.name));
+                    pinnedNames.splice(pinnedNames.indexOf(element));
+                    $pillHolder.addClass("badge-success").removeClass("badge-light");
+                    seatPool.shift();
+                }
+            });*/
+
+            /*if (pinnedNames.length > 0) {
+                $.each(pinnedNames.find((element) => {
+                    return element.weekDay == weekDayClass
+                }), (index, name) => {
+                    if (name.weekDay = weekDayClass) {
+                        $(seat).append($pillHolder.text(name.name));
+                        $pillHolder.addClass("badge-success").removeClass("badge-light");
+                        seatPool.shift();
+                    }
+                });
+            }*/
             if (seatPool.length > 0) {
-                $(seat).append($pillHolder.text(seatPool.shift()))
+                if (typeof pinnedNames[weekDayName] !== "undefined" && pinnedNames[weekDayName].length > 0) {
+                    $(seat).append($pillHolder.text(pinnedNames[weekDayName].shift()));
+                    $pillHolder.addClass("badge-success").removeClass("badge-light");
+                    seatPool.shift(); 
+                } else {
+                    $(seat).append($pillHolder.text(seatPool.shift()));
+                }
             } else {
-                $(seat).append($pillHolder.text("Free"))
+                $(seat).append($pillHolder.text("Free"));
             }
         });
 
         if (seatPool.length > 0) {
-            addExcessAllocationMessage(weekDayClass)
+            addExcessAllocationMessage(weekDayClass);
         }
 
         seatPool = [];
