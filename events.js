@@ -48,7 +48,16 @@ function addHover($obj) {
                 }
             }
         }
-    })
+    });
+
+    $obj.contextmenu(() => {
+        if ($obj.hasClass("badge-success")) {
+            $obj.removeClass("badge-success").addClass("badge-light");
+        } else {
+            $obj.removeClass("badge-light").addClass("badge-success");
+        }
+        return false;
+    });
 }
 
 function addSwitchTableEvent($pill) {
